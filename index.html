@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LearnQuest — Gamified Rural Learning Platform</title>
+  <meta name="description" content="Your Village Becomes Your Classroom. LearnQuest bridges rural school education with real-world village missions, adaptive learning, and offline-first technology.">
+  
+  <!-- PWA Manifest & Meta -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#356B3D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LearnQuest">
+  
+  <!-- Google Fonts: Outfit, Plus Jakarta Sans & Baloo Thambi 2 for Tamil -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-nature">
+  <!-- Desktop / Tablet Showcase Control Bar -->
+  <header class="prototype-control-bar" id="protoControlBar">
+    <div class="control-brand">
+      <span class="brand-sprout">🌱</span>
+      <div>
+        <strong>LearnQuest</strong>
+        <span class="tag-sih">SIH25048 • Rural Education</span>
+      </div>
+    </div>
+    
+    <div class="control-actions">
+      <!-- Quick Role Switcher -->
+      <button class="btn-ctrl" id="btnToggleRole" title="Switch between Student and Teacher views">
+        <span id="roleIcon">👩‍🏫</span> <span id="roleLabel" data-i18n="ctrl_teacher_view">Teacher View</span>
+      </button>
+
+      <!-- Offline Simulation Switch -->
+      <button class="btn-ctrl" id="btnToggleOffline" title="Simulate Internet Loss / Reconnection">
+        <span id="offlineIcon">🟢</span> <span id="offlineLabel" data-i18n="ctrl_online">Online</span>
+      </button>
+
+      <!-- Audio FX Sound Toggle -->
+      <button class="btn-ctrl" id="btnToggleAudioFx" title="Sound Effects On/Off">
+        <span id="audioFxIcon">🔊</span> <span id="audioFxLabel" data-i18n="ctrl_sound_on">Sound: ON</span>
+      </button>
+
+      <!-- Language Quick Switch -->
+      <div class="lang-quick-select">
+        <select id="quickLangSelect" aria-label="Select Language">
+          <option value="ta" selected>🇮🇳 தமிழ் (Tamil)</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+          <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
+        </select>
+      </div>
+
+      <!-- Frame Size Toggle -->
+      <button class="btn-ctrl" id="btnToggleFrame" title="Toggle Phone Shell Frame">
+        📱 <span id="frameToggleLabel" data-i18n="ctrl_full_view">Full View</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Device Shell Wrapper -->
+  <main class="app-viewport-wrapper phone-frame-active" id="appWrapper">
+    <div class="mobile-phone-frame" id="phoneFrame">
+      <!-- Top Speaker & Camera Notch -->
+      <div class="phone-notch">
+        <div class="notch-speaker"></div>
+        <div class="notch-lens"></div>
+      </div>
+
+      <!-- Simulated Mobile Status Bar -->
+      <div class="mobile-status-bar">
+        <span class="status-time" id="statusClock">09:41</span>
+        <div class="status-indicators">
+          <span class="status-offline-badge" id="statusBarOfflineBadge" style="display: none;" data-i18n="status_offline_badge">OFFLINE</span>
+          <span id="statusSignal">📶</span>
+          <span id="statusWifi">⚡</span>
+          <span id="statusBattery">🔋 94%</span>
+        </div>
+      </div>
+
+      <!-- APP CONTENT CONTAINER (Screens Stack) -->
+      <div class="screen-viewport" id="screenViewport">
+
+        <!-- ==============================================
+             SCREEN 1: SPLASH SCREEN
+             ============================================== -->
+        <section class="screen active" id="screen-splash">
+          <div class="splash-container">
+            <div class="splash-brand-hero">
+              <div class="sprout-badge-glow">
+                <span class="sprout-emoji">🌱</span>
+              </div>
+              <h1 class="splash-title">LearnQuest</h1>
+              <p class="splash-tagline" data-i18n="splash_tagline">“Learn • Play • Grow”</p>
+              <div class="village-classroom-quote">
+                <span class="quote-icon">🌾</span>
+                <p data-i18n="splash_quote">“Your village is your classroom.”</p>
+              </div>
+            </div>
+
+            <!-- Quick Language Selector on Splash -->
+            <div class="splash-lang-card">
+              <label class="splash-lang-label">
+                <span>🌐</span> <span data-i18n="choose_language_lbl">Choose Preferred Language:</span>
+              </label>
+              <div class="splash-lang-grid">
+                <button class="splash-lang-btn active" data-lang="ta">🇮🇳 தமிழ்</button>
+                <button class="splash-lang-btn" data-lang="en">🇬🇧 English</button>
+                <button class="splash-lang-btn" data-lang="hi">🇮🇳 हिन्दी</button>
+                <button class="splash-lang-btn" data-lang="or">🇮🇳 ଓଡ଼ିଆ</button>
+              </div>
+            </div>
+
+            <div class="splash-action-block">
+              <button class="btn-primary-leaf btn-large btn-ripple" id="btnSplashGetStarted">
+                <span data-i18n="btn_get_started">Get Started</span>
+                <span class="btn-arrow">➔</span>
+              </button>
+              <p class="splash-sih-note" data-i18n="splash_sih_note">AI-Powered Experiential Learning for Rural Schools</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 2: HOME SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-home">
+          <!-- Top App Bar -->
+          <header class="app-top-header">
+            <div class="user-greeting-wrap">
+              <div class="avatar-ring" id="homeAvatarRing">
+                <span class="avatar-emoji" id="homeAvatarEmoji">🧑‍🌾</span>
+              </div>
+              <div>
+                <span class="greeting-sub" data-i18n="greeting_welcome">Welcome, Student!</span>
+                <h2 class="user-name" id="homeUserName">Kavin</h2>
+              </div>
+            </div>
+            <div class="header-right-actions">
+              <button class="icon-bubble-btn" id="btnHeaderOffline" title="Offline Status">
+                <span id="homeOfflineDot" class="status-dot online"></span>
+                📶
+              </button>
+              <button class="icon-bubble-btn" id="btnHeaderVoice" title="Audio Assistant">
+                🔊
+              </button>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Student Gamification Stats Bar -->
+            <div class="stats-ribbon">
+              <div class="stat-pill xp-pill" id="statXpPill">
+                <span class="stat-icon">⭐</span>
+                <span class="stat-value" id="homeXpVal">320</span>
+                <span class="stat-label">XP</span>
+              </div>
+              <div class="stat-pill level-pill">
+                <span class="stat-icon">🏆</span>
+                <span class="stat-value" id="homeLevelVal">Level 3</span>
+              </div>
+              <div class="stat-pill streak-pill">
+                <span class="stat-icon">🔥</span>
+                <span class="stat-value" id="homeStreakVal">5 Day</span>
+                <span class="stat-label" data-i18n="stat_streak_lbl">Streak</span>
+              </div>
+            </div>
+
+            <!-- Offline Banner Alert (Dynamic) -->
+            <div class="offline-banner-alert" id="homeOfflineNotice" style="display: none;">
+              <span class="alert-icon">🟢</span>
+              <div class="alert-text">
+                <strong data-i18n="offline_mode_active">Offline Mode Active</strong>
+                <span data-i18n="offline_mode_sub">Lessons & progress saved locally on device.</span>
+              </div>
+              <button class="btn-xs-clean" id="btnBannerSyncCheck" data-i18n="btn_check_sync">Check Sync</button>
+            </div>
+
+            <!-- MAIN FEATURE: TODAY'S VILLAGE MISSION -->
+            <div class="feature-hero-card mission-hero-card">
+              <div class="hero-top-badge">
+                <span class="pulse-dot"></span>
+                <span data-i18n="today_mission_badge">🌾 TODAY'S VILLAGE MISSION</span>
+              </div>
+              <h3 class="hero-mission-title" data-i18n="today_mission_title">“Find a plant near your home and learn 3 facts about it.”</h3>
+              <p class="hero-mission-desc" data-i18n="today_mission_desc">Connect real-life village flora with your Science curriculum. Use live camera or simulated lens.</p>
+              
+              <div class="hero-mission-footer">
+                <div class="reward-tag">
+                  <span class="coin-icon">⭐</span>
+                  <span><span data-i18n="reward_lbl">Reward:</span> <strong>+30 XP</strong></span>
+                </div>
+                <button class="btn-primary-leaf btn-medium btn-ripple" id="btnHomeStartMission">
+                  <span data-i18n="btn_start_mission">Start Mission</span> 🚀
+                </button>
+              </div>
+            </div>
+
+            <!-- SMART ADAPTIVE FEATURE HIGHLIGHT: GROW WITH ME -->
+            <div class="grow-with-me-teaser-card" id="cardHomeGrowWithMe">
+              <div class="grow-icon-box">🌱</div>
+              <div class="grow-text-content">
+                <div class="grow-badge" data-i18n="grow_badge">ADAPTIVE AI ENGINE</div>
+                <h4 data-i18n="grow_title">🌱 “Grow With Me” AI</h4>
+                <p data-i18n="grow_desc">Personalized learning that adjusts automatically based on your answers.</p>
+              </div>
+              <button class="btn-round-arrow" title="Open Adaptive Learning">➔</button>
+            </div>
+
+            <!-- QUICK ACCESS FEATURE CARDS -->
+            <div class="section-heading">
+              <h4 data-i18n="explore_hub">Explore & Learn</h4>
+              <span class="heading-sub-tag" data-i18n="rural_curriculum_tag">Rural Curriculum</span>
+            </div>
+
+            <div class="feature-card-grid">
+              <!-- Card 1: Continue Learning -->
+              <div class="feature-card card-cream" id="cardHomeSubjects">
+                <div class="fcard-header">
+                  <span class="fcard-icon">📚</span>
+                  <span class="fcard-status" data-i18n="grade_tag">Grade 10</span>
+                </div>
+                <h4 class="fcard-title" data-i18n="continue_learning">Continue Learning</h4>
+                <p class="fcard-sub" data-i18n="continue_sub">Science: Plant Anatomy & Photosynthesis</p>
+                <div class="fcard-progress-bar">
+                  <div class="progress-fill" style="width: 70%;"></div>
+                </div>
+              </div>
+
+              <!-- Card 2: Offline Learning -->
+              <div class="feature-card card-leaf" id="cardHomeOffline">
+                <div class="fcard-header">
+                  <span class="fcard-icon">📶</span>
+                  <span class="fcard-badge-tag" data-i18n="offline_ready_tag">Offline Ready</span>
+                </div>
+                <h4 class="fcard-title" data-i18n="offline_learning">Offline Learning</h4>
+                <p class="fcard-sub" data-i18n="offline_sub">4 Subject Packs Ready Offline (52 MB)</p>
+                <div class="fcard-cta-link" data-i18n="manage_downloads_cta">Manage Downloads ➔</div>
+              </div>
+
+              <!-- Card 3: Language -->
+              <div class="feature-card card-light" id="cardHomeLanguage">
+                <div class="fcard-header">
+                  <span class="fcard-icon">🌐</span>
+                  <span class="fcard-badge-tag lang-active-tag" id="homeActiveLangBadge">தமிழ்</span>
+                </div>
+                <h4 class="fcard-title" data-i18n="language_title">Language & Voice</h4>
+                <p class="fcard-sub" data-i18n="language_sub">Tamil, English, Hindi, Odia with Voice Read-aloud</p>
+                <div class="fcard-cta-link" data-i18n="change_voice_cta">Change Voice ➔</div>
+              </div>
+
+              <!-- Card 4: My Progress -->
+              <div class="feature-card card-xp" id="cardHomeProgress">
+                <div class="fcard-header">
+                  <span class="fcard-icon">📊</span>
+                  <span class="fcard-badge-tag" data-i18n="five_badges_tag">5 Badges</span>
+                </div>
+                <h4 class="fcard-title" data-i18n="my_progress">My Progress</h4>
+                <p class="fcard-sub" data-i18n="progress_sub">Level 3 Village Scout • 12 Missions done</p>
+                <div class="fcard-cta-link" data-i18n="view_stats_cta">View Stats ➔</div>
+              </div>
+            </div>
+
+            <!-- COMMUNITY CHALLENGE TEASER -->
+            <div class="community-teaser-card" id="cardHomeCommunity">
+              <div class="comm-banner-left">
+                <span class="comm-icon">🌍</span>
+                <div>
+                  <span class="comm-sub" data-i18n="comm_challenge_badge">COMMUNITY CHALLENGE</span>
+                  <h5 data-i18n="comm_challenge_title">Village Water Saver</h5>
+                  <p data-i18n="comm_challenge_sub">Collaborate with village peers: 2/3 complete</p>
+                </div>
+              </div>
+              <div class="comm-banner-right">
+                <span class="badge-mini-gold">+50 XP</span>
+                <button class="btn-secondary-leaf btn-small" data-i18n="btn_view">View</button>
+              </div>
+            </div>
+
+            <!-- CERTIFICATE GENERATOR BANNER -->
+            <div class="certificate-teaser-card" id="btnOpenCertificateTeaser">
+              <div class="cert-icon-wrap">📜</div>
+              <div class="cert-text-wrap">
+                <strong data-i18n="cert_banner_title">Village Scholar Certificate</strong>
+                <p data-i18n="cert_banner_sub">Generate & download your official achievement certificate</p>
+              </div>
+              <button class="btn-xs-clean" data-i18n="btn_claim_cert">Claim ➔</button>
+            </div>
+
+            <!-- TEACHER DASHBOARD SHORTCUT -->
+            <div class="teacher-shortcut-box" id="cardHomeTeacher">
+              <span data-i18n="teacher_shortcut_lbl">👩‍🏫 Are you a Teacher?</span>
+              <button class="btn-text-link" data-i18n="teacher_shortcut_btn">View Class Gap Insights ➔</button>
+            </div>
+            
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 3: VILLAGE MISSIONS HUB
+             ============================================== -->
+        <section class="screen" id="screen-missions">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="missions_title">Village Missions</h2>
+              <p class="sub-header-text" data-i18n="missions_sub">“Learn From Your World”</p>
+            </div>
+            <div class="header-right-actions">
+              <span class="mission-counter-badge" id="missionsCompletedCount">12 Done</span>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Mission Filter Chips -->
+            <div class="filter-chips-row">
+              <button class="filter-chip active" data-filter="all" data-i18n="filter_all">All Missions</button>
+              <button class="filter-chip" data-filter="science" data-i18n="filter_science">🌱 Science</button>
+              <button class="filter-chip" data-filter="math" data-i18n="filter_math">📐 Mathematics</button>
+              <button class="filter-chip" data-filter="community" data-i18n="filter_community">🌍 Community</button>
+            </div>
+
+            <div class="missions-list">
+              <!-- Mission 1: Plant Mission -->
+              <div class="mission-card" data-category="science" id="missionCardPlant">
+                <div class="mission-card-header">
+                  <div class="mission-type-badge type-science">
+                    <span>🌱</span> <span data-i18n="tag_science">SCIENCE</span>
+                  </div>
+                  <div class="mission-reward-badge">
+                    <span>⭐</span> +30 XP
+                  </div>
+                </div>
+                <h3 class="mission-title" data-i18n="m1_title">🌱 PLANT MISSION</h3>
+                <p class="mission-desc" data-i18n="m1_desc">“Identify a plant near your home and learn 3 facts about it.”</p>
+                <div class="mission-context-box">
+                  <span class="context-tag" data-i18n="context_action_tag">Real-World Action:</span>
+                  <span data-i18n="m1_action">Find Neem, Tulsi, or Moringa in your backyard.</span>
+                </div>
+                <div class="mission-card-actions">
+                  <button class="btn-audio-listen btn-voice-speak" id="btnM1Listen" data-text="Plant Mission: Identify a plant near your home and learn three facts about it.">
+                    🔊 <span data-i18n="btn_listen">Listen</span>
+                  </button>
+                  <button class="btn-primary-leaf btn-small btn-start-plant-mission" data-i18n="btn_start_mission_cta">
+                    Start Mission 🚀
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mission 2: Water Mission -->
+              <div class="mission-card" data-category="science" id="missionCardWater">
+                <div class="mission-card-header">
+                  <div class="mission-type-badge type-science">
+                    <span>💧</span> <span data-i18n="tag_science">SCIENCE</span>
+                  </div>
+                  <div class="mission-reward-badge">
+                    <span>⭐</span> +30 XP
+                  </div>
+                </div>
+                <h3 class="mission-title" data-i18n="m2_title">💧 WATER MISSION</h3>
+                <p class="mission-desc" data-i18n="m2_desc">“Find two ways your family can save water.”</p>
+                <div class="mission-context-box">
+                  <span class="context-tag" data-i18n="context_action_tag">Real-World Action:</span>
+                  <span data-i18n="m2_action">Inspect rainwater collection and kitchen runoff usage.</span>
+                </div>
+                <div class="mission-card-actions">
+                  <button class="btn-audio-listen btn-voice-speak" id="btnM2Listen" data-text="Water Mission: Find two ways your family can save water in your village.">
+                    🔊 <span data-i18n="btn_listen">Listen</span>
+                  </button>
+                  <button class="btn-primary-leaf btn-small" id="btnStartWaterMission" data-i18n="btn_open_lab">
+                    Open Lab 🚀
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mission 3: Shopping Math -->
+              <div class="mission-card" data-category="math" id="missionCardShop">
+                <div class="mission-card-header">
+                  <div class="mission-type-badge type-math">
+                    <span>🛒</span> <span data-i18n="tag_math">MATHEMATICS</span>
+                  </div>
+                  <div class="mission-reward-badge">
+                    <span>⭐</span> +30 XP
+                  </div>
+                </div>
+                <h3 class="mission-title" data-i18n="m3_title">🛒 SHOPPING MATH</h3>
+                <p class="mission-desc" data-i18n="m3_desc">“Calculate the total cost of three items from a local shop.”</p>
+                <div class="mission-context-box">
+                  <span class="context-tag" data-i18n="context_action_tag">Real-World Action:</span>
+                  <span data-i18n="m3_action">Buy rice, lentils, and jaggery; check the balance returned.</span>
+                </div>
+                <div class="mission-card-actions">
+                  <button class="btn-audio-listen btn-voice-speak" id="btnM3Listen" data-text="Shopping Math: Calculate the total cost of three grocery items from your village shop.">
+                    🔊 <span data-i18n="btn_listen">Listen</span>
+                  </button>
+                  <button class="btn-primary-leaf btn-small" id="btnStartShopMission" data-i18n="btn_open_shop">
+                    Open Shop 🚀
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mission 4: Farming Math -->
+              <div class="mission-card" data-category="math" id="missionCardFarm">
+                <div class="mission-card-header">
+                  <div class="mission-type-badge type-math">
+                    <span>🌾</span> <span data-i18n="tag_math">MATHEMATICS</span>
+                  </div>
+                  <div class="mission-reward-badge">
+                    <span>⭐</span> +30 XP
+                  </div>
+                </div>
+                <h3 class="mission-title" data-i18n="m4_title">🌾 FARMING MATH</h3>
+                <p class="mission-desc" data-i18n="m4_desc">“A farmer has 5 bags of rice. Each bag weighs 25 kg. Calculate the total weight.”</p>
+                <div class="mission-context-box">
+                  <span class="context-tag" data-i18n="context_action_tag">Real-World Action:</span>
+                  <span data-i18n="m4_action">Apply multiplication to local harvest bags and tractor loads.</span>
+                </div>
+                <div class="mission-card-actions">
+                  <button class="btn-audio-listen btn-voice-speak" id="btnM4Listen" data-text="Farming Math: A farmer has five bags of rice. Each bag weighs twenty-five kilograms. Calculate total weight.">
+                    🔊 <span data-i18n="btn_listen">Listen</span>
+                  </button>
+                  <button class="btn-primary-leaf btn-small" id="btnStartFarmMission" data-i18n="btn_open_scale">
+                    Open Scale 🚀
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 4: REAL-WORLD MISSION SCREEN (CAMERA & BOTANY LENS)
+             ============================================== -->
+        <section class="screen" id="screen-real-world">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="missions">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="m1_title">🌱 Plant Mission</h2>
+              <p class="sub-header-text" data-i18n="rw_sub">Interactive Real-World Quest</p>
+            </div>
+            <div class="header-right-actions">
+              <span class="badge-mini-gold">+30 XP</span>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- 3 Step Interactive Progress Stepper -->
+            <div class="mission-steps-progress">
+              <div class="step-item active" id="questStep1">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                  <strong data-i18n="step1_title">STEP 1</strong>
+                  <span data-i18n="step1_desc">“Look around your home or school.”</span>
+                </div>
+              </div>
+              <div class="step-item" id="questStep2">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                  <strong data-i18n="step2_title">STEP 2</strong>
+                  <span data-i18n="step2_desc">“Find a plant.”</span>
+                </div>
+              </div>
+              <div class="step-item" id="questStep3">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                  <strong data-i18n="step3_title">STEP 3</strong>
+                  <span data-i18n="step3_desc">“Learn its name and one use.”</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SMART CAMERA / IDENTIFIER VIEWFINDER -->
+            <div class="camera-simulation-card">
+              <div class="viewfinder-header">
+                <span class="lens-status" id="lensStatusText" data-i18n="lens_status">📷 Smart Botanical AI Lens</span>
+                <button class="btn-xs-clean" id="btnToggleLiveWebcam" data-i18n="btn_switch_live_cam">📹 Switch Live Camera</button>
+              </div>
+              
+              <div class="viewfinder-box" id="cameraViewfinder">
+                <video id="liveCameraVideo" autoplay playsinline muted style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; border-radius:18px;"></video>
+                <canvas id="cameraCanvas" style="display:none;"></canvas>
+
+                <div class="viewfinder-reticle">
+                  <div class="reticle-corner tl"></div>
+                  <div class="reticle-corner tr"></div>
+                  <div class="reticle-corner bl"></div>
+                  <div class="reticle-corner br"></div>
+                  
+                  <!-- Detected Plant Visual -->
+                  <div class="detected-plant-display" id="detectedPlantVisual">
+                    <span class="plant-big-icon" id="plantEmoji">🌿</span>
+                    <div class="ai-detect-tag" id="aiDetectTag">
+                      <span class="scan-sparkle">✨</span>
+                      <strong id="detectedPlantName">Neem Tree (வேம்பு)</strong>
+                      <span class="confidence-badge" data-i18n="match_confidence">98% Match</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Plant Switcher Selector -->
+                <div class="viewfinder-quick-plants">
+                  <span data-i18n="point_plant_lbl">Point at plant or select:</span>
+                  <div class="plant-pill-group">
+                    <button class="plant-pill active" data-plant="neem">🌿 Neem (வேம்பு)</button>
+                    <button class="plant-pill" data-plant="tulsi">🌱 Tulsi (துளசி)</button>
+                    <button class="plant-pill" data-plant="moringa">🍃 Moringa (முருங்கை)</button>
+                    <button class="plant-pill" data-plant="banana">🍌 Banana (வாழை)</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Plant Facts Revealed -->
+              <div class="plant-facts-sheet" id="plantFactsSheet">
+                <div class="facts-header">
+                  <div>
+                    <h4 id="factSheetTitle">Neem (Azadirachta indica)</h4>
+                    <span class="tamil-subname" id="factSheetTamil">தமிழ்: வேப்ப மரம்</span>
+                  </div>
+                  <button class="btn-audio-pill btn-voice-speak" id="btnListenPlantTamil" data-text="வேப்ப மரம் சிறந்த மருத்துவ குணம் கொண்டது. இது பூச்சிகளை விரட்டவும், தோல் நோய்களை குணப்படுத்தவும் உதவுகிறது.">
+                    🔊 <span data-i18n="btn_listen_local">Listen in Tamil</span>
+                  </button>
+                </div>
+
+                <div class="facts-list-cards">
+                  <div class="fact-card-item">
+                    <span class="fact-num-badge">1</span>
+                    <p id="fact1Text"><strong>Root & Water:</strong> Deep taproots draw water from deep soil during dry seasons.</p>
+                  </div>
+                  <div class="fact-card-item">
+                    <span class="fact-num-badge">2</span>
+                    <p id="fact2Text"><strong>Village Medicine:</strong> Leaves purify air, repel farm pests, and soothe skin.</p>
+                  </div>
+                  <div class="fact-card-item">
+                    <span class="fact-num-badge">3</span>
+                    <p id="fact3Text"><strong>Photosynthesis:</strong> Broad compound leaves capture sunlight to produce oxygen.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons Group -->
+            <div class="mission-action-trio">
+              <button class="btn-outline-leaf" id="btnReidentifyPlant" data-i18n="btn_scan_next">
+                📷 Scan Next
+              </button>
+              <button class="btn-outline-leaf btn-voice-speak" id="btnVoicePlantStep" data-text="Plants need sunlight, soil nutrients, and water to grow strong.">
+                🔊 <span data-i18n="btn_listen_local">Listen in Tamil</span>
+              </button>
+              <button class="btn-outline-leaf" id="btnOpenMiniLesson" data-i18n="btn_full_lesson">
+                📚 Full Lesson
+              </button>
+            </div>
+
+            <!-- Complete Mission Button -->
+            <div class="complete-mission-box">
+              <button class="btn-primary-leaf btn-large btn-ripple" id="btnCompleteMissionFlow" data-i18n="btn_complete_mission_xp">
+                🎉 Complete Mission (+30 XP)
+              </button>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 5: SMART LEARNING ("GROW WITH ME")
+             ============================================== -->
+        <section class="screen" id="screen-grow-with-me">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="grow_title">🌱 Grow With Me</h2>
+              <p class="sub-header-text" data-i18n="adaptive_sub">Adaptive AI Learning Engine</p>
+            </div>
+            <div class="header-right-actions">
+              <span class="smart-ai-badge" data-i18n="ai_active_tag">AI Active</span>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Concept Explainer Banner -->
+            <div class="adaptive-explainer-banner">
+              <div class="explainer-icon">🧠</div>
+              <div>
+                <h4 data-i18n="adaptive_banner_title">“LearnQuest adjusts practice based on your answers.”</h4>
+                <p data-i18n="adaptive_banner_sub">No student is left behind. When you find a topic tricky, LearnQuest offers simpler village-story examples before trying again.</p>
+              </div>
+            </div>
+
+            <!-- Interactive Scenario Toggle for Demonstration -->
+            <div class="scenario-demo-card">
+              <div class="scenario-demo-header">
+                <span>🔄 <span data-i18n="simulate_perf_lbl">Simulate Student Performance:</span></span>
+              </div>
+              <div class="scenario-btn-toggle">
+                <button class="scenario-toggle-btn active" id="btnScenarioStruggling" data-i18n="btn_scen_struggling">
+                  ⚠️ Low Score (Fractions)
+                </button>
+                <button class="scenario-toggle-btn" id="btnScenarioMastered" data-i18n="btn_scen_mastered">
+                  🌟 High Score (Mastery)
+                </button>
+              </div>
+            </div>
+
+            <!-- ADAPTIVE STATE 1: STRUGGLING / REMEDIAL SUPPORT -->
+            <div class="adaptive-content-box" id="adaptiveBoxStruggling">
+              <div class="adaptive-status-alert alert-gentle">
+                <span class="status-emo">🌱</span>
+                <div>
+                  <strong data-i18n="adaptive_struggle_title">“Let's practice this topic again.”</strong>
+                  <p data-i18n="adaptive_struggle_sub">Don't worry! Math is just like sharing food with family.</p>
+                </div>
+              </div>
+
+              <!-- 1. Simple Explanation -->
+              <div class="adaptive-section-card">
+                <div class="adaptive-card-header">
+                  <span class="card-step-badge">1</span>
+                  <h5 data-i18n="frac_exp_heading">Simple Explanation: What is a Fraction?</h5>
+                  <button class="btn-mini-voice btn-voice-speak" id="btnVoiceDosaExp" data-text="ஒரு தோசை அல்லது ரொட்டியை சரி பாதியாக பிரித்தால், அது இரண்டு அரை பாகங்கள் ஆகும். இதுவே பின்னம்.">🔊</button>
+                </div>
+                <p class="adaptive-p" data-i18n="frac_exp_body">
+                  A fraction simply means dividing a whole item into equal parts.
+                  If your mother bakes <strong>1 warm Dosa</strong> and cuts it equally for you and your brother, each gets <strong>1/2 (half)</strong>!
+                </p>
+                
+                <!-- Visual Interactive Fraction Tool -->
+                <div class="interactive-fraction-demo">
+                  <div class="dosa-visual-circle" id="dosaVisual">
+                    <div class="dosa-slice slice-1 active">1/2</div>
+                    <div class="dosa-slice slice-2">1/2</div>
+                  </div>
+                  <div class="dosa-controls">
+                    <span data-i18n="divide_dosa_lbl">Divide Dosa into:</span>
+                    <div class="dosa-btn-group">
+                      <button class="btn-dosa-cut active" data-parts="2" data-i18n="dosa_2_parts">2 Parts (1/2)</button>
+                      <button class="btn-dosa-cut" data-parts="4" data-i18n="dosa_4_parts">4 Parts (1/4)</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Easy Village Example -->
+              <div class="adaptive-section-card">
+                <div class="adaptive-card-header">
+                  <span class="card-step-badge">2</span>
+                  <h5 data-i18n="village_example_heading">Easy Village Example</h5>
+                </div>
+                <div class="village-story-example">
+                  <span class="story-emo">🥭</span>
+                  <div>
+                    <strong data-i18n="mango_story_title">Mango Harvest Sharing:</strong>
+                    <p data-i18n="mango_story_body">Raju has <strong>4 mangoes</strong>. He gives <strong>1 mango</strong> to his sister. He gave away <strong>1/4</strong> of his mangoes!</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Practice Question -->
+              <div class="adaptive-section-card practice-card">
+                <div class="adaptive-card-header">
+                  <span class="card-step-badge">3</span>
+                  <h5 data-i18n="guided_practice_heading">Guided Practice Question</h5>
+                </div>
+                <p class="practice-q" id="practiceFractionQuestionText" data-i18n="practice_fraction_q">“If you divide a watermelon into 4 equal slices and eat 1 slice, what fraction did you eat?”</p>
+                
+                <div class="practice-options" id="practiceFractionOptions">
+                  <button class="practice-opt-btn" data-correct="false">A. 1/2</button>
+                  <button class="practice-opt-btn" data-correct="true">B. 1/4</button>
+                  <button class="practice-opt-btn" data-correct="false">C. 2/3</button>
+                  <button class="practice-opt-btn" data-correct="false">D. 3/4</button>
+                </div>
+                <div class="practice-feedback" id="practiceFeedbackBox" style="display: none;"></div>
+              </div>
+            </div>
+
+            <!-- ADAPTIVE STATE 2: EXCELLING / ADVANCED CHALLENGE -->
+            <div class="adaptive-content-box" id="adaptiveBoxMastered" style="display: none;">
+              <div class="adaptive-status-alert alert-excellent">
+                <span class="status-emo">🌟</span>
+                <div>
+                  <strong data-i18n="adaptive_master_title">“Great! Ready for a harder question?”</strong>
+                  <p data-i18n="adaptive_master_sub">You have mastered basic fractions! Let's level up to rural land and crop distribution.</p>
+                </div>
+              </div>
+
+              <div class="adaptive-section-card">
+                <div class="adaptive-card-header">
+                  <span class="card-step-badge">★</span>
+                  <h5 data-i18n="adv_farm_yield_heading">Farming Yield Challenge</h5>
+                </div>
+                <p class="practice-q" id="practiceAdvQuestionText" data-i18n="practice_adv_q">
+                  “A village farmer has 12 acres of fertile land. He plants paddy on 1/3 of the land and sugarcane on 1/2 of the land. How many total acres are planted?”
+                </p>
+                <div class="practice-options" id="practiceAdvOptions">
+                  <button class="practice-opt-btn" data-correct="false">A. 8 Acres</button>
+                  <button class="practice-opt-btn" data-correct="true">B. 10 Acres (4 + 6)</button>
+                  <button class="practice-opt-btn" data-correct="false">C. 6 Acres</button>
+                  <button class="practice-opt-btn" data-correct="false">D. 12 Acres</button>
+                </div>
+                <div class="practice-feedback" id="practiceAdvFeedbackBox" style="display: none;"></div>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 6: SUBJECTS SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-subjects">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="subjects_title">Choose Your Subject</h2>
+              <p class="sub-header-text" data-i18n="subjects_curriculum_sub">Grade 10 Rural Curriculum</p>
+            </div>
+            <div class="header-right-actions">
+              <span class="badge-mini-gold" data-i18n="three_subjects_tag">3 Subjects</span>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <div class="subjects-container">
+              <!-- SUBJECT 1: MATHEMATICS -->
+              <div class="subject-card card-math-theme">
+                <div class="subject-card-top">
+                  <div class="subject-icon-box">📐</div>
+                  <div class="subject-info">
+                    <h3 data-i18n="subj_math_title">Mathematics</h3>
+                    <p data-i18n="subj_math_sub">கணிதம் • Practical Village Calculations</p>
+                  </div>
+                  <span class="subject-progress-pct">80%</span>
+                </div>
+                
+                <div class="subject-topic-pills">
+                  <button class="topic-pill" data-subject="math" data-topic="numbers" data-i18n="topic_numbers">🔢 Numbers</button>
+                  <button class="topic-pill" data-subject="math" data-topic="multiplication" data-i18n="topic_multiplication">✖️ Multiplication</button>
+                  <button class="topic-pill" data-subject="math" data-topic="fractions" data-i18n="topic_fractions">🍰 Fractions</button>
+                  <button class="topic-pill" data-subject="math" data-topic="money" data-i18n="topic_money">💰 Money calculations</button>
+                </div>
+
+                <div class="subject-card-footer">
+                  <button class="btn-secondary-leaf btn-small btn-open-lesson" data-subject="math" data-topic="fractions" data-i18n="btn_read_lesson">
+                    Read Lesson 📖
+                  </button>
+                  <button class="btn-primary-leaf btn-small btn-launch-quiz" data-subject="math" data-i18n="btn_take_math_quiz">
+                    Take Math Quiz ➔
+                  </button>
+                </div>
+              </div>
+
+              <!-- SUBJECT 2: SCIENCE -->
+              <div class="subject-card card-science-theme">
+                <div class="subject-card-top">
+                  <div class="subject-icon-box">🔬</div>
+                  <div class="subject-info">
+                    <h3 data-i18n="subj_science_title">Science</h3>
+                    <p data-i18n="subj_science_sub">அறிவியல் • Nature, Flora & Ecosystems</p>
+                  </div>
+                  <span class="subject-progress-pct">70%</span>
+                </div>
+                
+                <div class="subject-topic-pills">
+                  <button class="topic-pill active" data-subject="science" data-topic="plants" data-i18n="topic_plants">🌱 Plants</button>
+                  <button class="topic-pill" data-subject="science" data-topic="human_body" data-i18n="topic_human_body">🫀 Human Body</button>
+                  <button class="topic-pill" data-subject="science" data-topic="water" data-i18n="topic_water">💧 Water</button>
+                  <button class="topic-pill" data-subject="science" data-topic="environment" data-i18n="topic_environment">🌾 Environment</button>
+                </div>
+
+                <div class="subject-card-footer">
+                  <button class="btn-secondary-leaf btn-small btn-open-lesson" data-subject="science" data-topic="plants" data-i18n="btn_read_lesson">
+                    Read Lesson 📖
+                  </button>
+                  <button class="btn-primary-leaf btn-small btn-launch-quiz" data-subject="science" data-i18n="btn_take_science_quiz">
+                    Take Science Quiz ➔
+                  </button>
+                </div>
+              </div>
+
+              <!-- SUBJECT 3: ENGLISH -->
+              <div class="subject-card card-english-theme">
+                <div class="subject-card-top">
+                  <div class="subject-icon-box">📖</div>
+                  <div class="subject-info">
+                    <h3 data-i18n="subj_english_title">English</h3>
+                    <p data-i18n="subj_english_sub">ஆங்கிலம் • Daily Rural Communication</p>
+                  </div>
+                  <span class="subject-progress-pct">85%</span>
+                </div>
+                
+                <div class="subject-topic-pills">
+                  <button class="topic-pill" data-subject="english" data-topic="grammar" data-i18n="topic_grammar">✍️ Grammar</button>
+                  <button class="topic-pill" data-subject="english" data-topic="vocabulary" data-i18n="topic_vocabulary">🔤 Vocabulary</button>
+                  <button class="topic-pill" data-subject="english" data-topic="reading" data-i18n="topic_reading">📖 Reading</button>
+                  <button class="topic-pill" data-subject="english" data-topic="everyday" data-i18n="topic_everyday">🗣️ Everyday English</button>
+                </div>
+
+                <div class="subject-card-footer">
+                  <button class="btn-secondary-leaf btn-small btn-open-lesson" data-subject="english" data-topic="everyday" data-i18n="btn_read_lesson">
+                    Read Lesson 📖
+                  </button>
+                  <button class="btn-primary-leaf btn-small btn-launch-quiz" data-subject="english" data-i18n="btn_take_english_quiz">
+                    Take English Quiz ➔
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN: SUBJECT LESSON VIEWER
+             ============================================== -->
+        <section class="screen" id="screen-lesson">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="subjects">←</button>
+            <div class="header-center-title">
+              <h2 id="lessonViewTitle">Plant Anatomy</h2>
+              <p class="sub-header-text" id="lessonViewSubject">Science • Grade 10</p>
+            </div>
+            <div class="header-right-actions">
+              <button class="btn-audio-listen btn-voice-speak" id="btnLessonAudioSpeak">🔊 <span data-i18n="btn_read">Read</span></button>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <div class="lesson-container">
+              <div class="lesson-hero-card">
+                <span class="lesson-hero-emoji" id="lessonHeroEmoji">🌱</span>
+                <h3 id="lessonHeroHeading">How Plants Absorb Water & Sunlight</h3>
+                <p id="lessonHeroSub">A walk through the green village fields of Tamil Nadu.</p>
+              </div>
+
+              <div class="lesson-story-card" id="lessonBodyContent">
+                <!-- Dynamic Content -->
+              </div>
+
+              <div class="lesson-actions-bar">
+                <button class="btn-primary-leaf btn-large btn-ripple" id="btnLessonTakeQuiz" data-i18n="btn_practice_topic_quiz">
+                  Practice Topic Quiz ➔
+                </button>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 7: QUIZ SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-quiz">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="subjects">✕</button>
+            <div class="header-center-title">
+              <h2 id="quizHeaderSubject">Science</h2>
+              <p class="sub-header-text" id="quizQuestionCount">Question 1 of 5</p>
+            </div>
+            <div class="header-right-actions">
+              <div class="quiz-xp-chip">
+                <span>⭐</span> <strong id="quizLiveXp">+10 XP</strong>
+              </div>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Quiz Progress Bar -->
+            <div class="quiz-progress-track">
+              <div class="quiz-progress-fill" id="quizProgressFill" style="width: 20%;"></div>
+            </div>
+
+            <div class="quiz-container">
+              <!-- Question Card -->
+              <div class="quiz-question-card">
+                <div class="quiz-q-meta">
+                  <span class="subject-tag-mini" id="quizMetaTopic">🌱 Plants & Botany</span>
+                  <button class="btn-mini-voice btn-voice-speak" id="btnQuizVoice" data-text="Which part of a plant absorbs water from the soil?">
+                    🔊
+                  </button>
+                </div>
+                <h3 class="quiz-question-text" id="quizQuestionTitle">
+                  “Which part of a plant absorbs water?”
+                </h3>
+              </div>
+
+              <!-- Options Grid (Large Touch Buttons) -->
+              <div class="quiz-options-list" id="quizOptionsList">
+                <button class="quiz-opt-btn" data-index="0">
+                  <span class="opt-letter">A</span>
+                  <span class="opt-text">Leaf</span>
+                </button>
+                <button class="quiz-opt-btn" data-index="1">
+                  <span class="opt-letter">B</span>
+                  <span class="opt-text">Root</span>
+                </button>
+                <button class="quiz-opt-btn" data-index="2">
+                  <span class="opt-letter">C</span>
+                  <span class="opt-text">Flower</span>
+                </button>
+                <button class="quiz-opt-btn" data-index="3">
+                  <span class="opt-letter">D</span>
+                  <span class="opt-text">Fruit</span>
+                </button>
+              </div>
+
+              <!-- Quiz Instant Explanation Box -->
+              <div class="quiz-explanation-box" id="quizExplanationBox" style="display: none;">
+                <div class="exp-icon">💡</div>
+                <div class="exp-text">
+                  <strong id="quizExpTitle">Correct!</strong>
+                  <p id="quizExpDetail">Roots have tiny root hairs that draw water and essential minerals from the soil.</p>
+                </div>
+              </div>
+
+              <!-- Submit / Next Button -->
+              <div class="quiz-action-bar">
+                <button class="btn-primary-leaf btn-large btn-ripple" id="btnSubmitQuizAnswer" disabled data-i18n="btn_submit_answer">
+                  Submit Answer ➔
+                </button>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 8: RESULT SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-result">
+          <div class="screen-scrollable-content result-layout">
+            <div class="result-hero-box">
+              <div class="confetti-burst">🎉</div>
+              <h2 class="result-title" data-i18n="result_great_job">Great Job!</h2>
+              <p class="result-subtitle" data-i18n="result_subtitle">You connected school learning with your village!</p>
+
+              <!-- Score Card -->
+              <div class="result-score-circle">
+                <div class="score-number-wrap">
+                  <span class="big-score" id="resultScoreVal">4</span>
+                  <span class="score-slash">/5</span>
+                </div>
+                <span class="score-label" data-i18n="score_lbl">Score</span>
+              </div>
+
+              <!-- XP Reward Badge -->
+              <div class="result-xp-reward">
+                <span class="xp-star">⭐</span>
+                <span class="xp-text" data-i18n="xp_earned_msg">+30 XP Earned</span>
+              </div>
+            </div>
+
+            <!-- Unlocked Badge Card -->
+            <div class="unlocked-badge-card" id="resultBadgeUnlocked">
+              <div class="badge-ribbon-tag" data-i18n="new_badge_unlocked_ribbon">🏆 NEW BADGE UNLOCKED!</div>
+              <div class="badge-icon-huge">🌾</div>
+              <h3 class="badge-name" data-i18n="badge_village_explorer">“Village Explorer”</h3>
+              <p class="badge-desc" data-i18n="badge_explorer_desc">Completed your first real-world plant identification & science quiz in the village!</p>
+            </div>
+
+            <!-- Result Buttons -->
+            <div class="result-actions-stack">
+              <button class="btn-primary-leaf btn-large btn-ripple" id="btnResultNextMission" data-i18n="btn_next_mission">
+                Next Mission 🚀
+              </button>
+              <button class="btn-secondary-leaf btn-medium" id="btnResultViewProgress" data-i18n="btn_view_progress">
+                View Progress 📊
+              </button>
+              <button class="btn-text-link" id="btnResultGrowWithMe" data-i18n="btn_practice_grow">
+                🌱 Practice with "Grow With Me"
+              </button>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 9: OFFLINE LEARNING SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-offline">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="offline_screen_title">📶 Offline Learning</h2>
+              <p class="sub-header-text" data-i18n="offline_screen_sub">Learn Without Internet</p>
+            </div>
+            <div class="header-right-actions">
+              <span class="badge-offline-status" id="offlineStatusBadge" data-i18n="offline_ready_badge">🟢 Offline Ready</span>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Offline Value Card -->
+            <div class="offline-hero-card">
+              <div class="offline-hero-icon">📡</div>
+              <div>
+                <h3 data-i18n="offline_hero_title">“Download lessons when internet is available and continue learning when you are offline.”</h3>
+                <p data-i18n="offline_hero_sub">Zero internet required in the classroom or fields. All quizzes and missions run directly on your phone.</p>
+              </div>
+            </div>
+
+            <!-- Simulated Connection Switcher & Sync Status -->
+            <div class="offline-status-control-box">
+              <div class="status-control-header">
+                <strong data-i18n="sim_network_lbl">Simulate Network State:</strong>
+                <button class="btn-toggle-network" id="btnToggleSimNetwork">
+                  <span id="simNetIcon">🟢</span> <span id="simNetLabel" data-i18n="btn_switch_to_offline">Switch to Offline Mode</span>
+                </button>
+              </div>
+
+              <!-- Live Sync Box -->
+              <div class="sync-status-display" id="syncStatusBox">
+                <div class="sync-indicator-icon" id="syncIcon">🟢</div>
+                <div class="sync-text-wrap">
+                  <strong id="syncTitle" data-i18n="sync_offline_mode">Offline Mode</strong>
+                  <p id="syncDesc" data-i18n="sync_offline_desc">“Your progress is saved on the device.”</p>
+                </div>
+                <button class="btn-sync-trigger" id="btnTriggerManualSync" data-i18n="btn_sync_now">☁️ Sync Now</button>
+              </div>
+            </div>
+
+            <!-- Downloaded Subject Packs -->
+            <div class="section-heading">
+              <h4 data-i18n="available_packs_heading">Available Offline Packs</h4>
+              <span class="heading-sub-tag" data-i18n="local_storage_tag">Local Storage</span>
+            </div>
+
+            <div class="offline-packs-list">
+              <!-- Pack 1: Mathematics -->
+              <div class="offline-pack-card">
+                <div class="pack-info">
+                  <span class="pack-icon">📐</span>
+                  <div>
+                    <strong data-i18n="subj_math_title">Mathematics</strong>
+                    <span data-i18n="pack_math_sub">Grade 10 • 12 Lessons • 14 MB</span>
+                  </div>
+                </div>
+                <div class="pack-status-badge downloaded" data-i18n="downloaded_check">
+                  Downloaded ✓
+                </div>
+              </div>
+
+              <!-- Pack 2: Science -->
+              <div class="offline-pack-card">
+                <div class="pack-info">
+                  <span class="pack-icon">🔬</span>
+                  <div>
+                    <strong data-i18n="subj_science_title">Science</strong>
+                    <span data-i18n="pack_science_sub">Grade 10 • 15 Lessons • 18 MB</span>
+                  </div>
+                </div>
+                <div class="pack-status-badge downloaded" data-i18n="downloaded_check">
+                  Downloaded ✓
+                </div>
+              </div>
+
+              <!-- Pack 3: English -->
+              <div class="offline-pack-card">
+                <div class="pack-info">
+                  <span class="pack-icon">📖</span>
+                  <div>
+                    <strong data-i18n="subj_english_title">English</strong>
+                    <span data-i18n="pack_english_sub">Grade 10 • 10 Lessons • 12 MB</span>
+                  </div>
+                </div>
+                <div class="pack-status-badge downloaded" data-i18n="downloaded_check">
+                  Downloaded ✓
+                </div>
+              </div>
+
+              <!-- Pack 4: Village Missions -->
+              <div class="offline-pack-card">
+                <div class="pack-info">
+                  <span class="pack-icon">🌾</span>
+                  <div>
+                    <strong data-i18n="missions_title">Village Missions</strong>
+                    <span data-i18n="pack_missions_sub">20 Real-World Quests • 8 MB</span>
+                  </div>
+                </div>
+                <div class="pack-status-badge downloaded" data-i18n="downloaded_check">
+                  Downloaded ✓
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 10: LANGUAGE + VOICE SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-language">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="choose_lang_title">🌐 Choose Your Language</h2>
+              <p class="sub-header-text" data-i18n="multilingual_sub">Multilingual Rural Support</p>
+            </div>
+            <div class="header-right-actions">
+              <span class="badge-mini-gold">🔊 Audio TTS</span>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Language Selection Cards Grid -->
+            <div class="lang-cards-grid">
+              <!-- Tamil (Prominent) -->
+              <div class="lang-option-card active featured-lang" data-lang-code="ta">
+                <div class="lang-card-top">
+                  <span class="lang-flag">🇮🇳</span>
+                  <div class="lang-badge-tag" data-i18n="lang_tag_primary">Primary</div>
+                </div>
+                <h3 class="lang-native-name">தமிழ்</h3>
+                <p class="lang-english-name">Tamil</p>
+                <div class="lang-check-icon">✓</div>
+              </div>
+
+              <!-- English -->
+              <div class="lang-option-card" data-lang-code="en">
+                <div class="lang-card-top">
+                  <span class="lang-flag">🇬🇧</span>
+                </div>
+                <h3 class="lang-native-name">English</h3>
+                <p class="lang-english-name">English</p>
+                <div class="lang-check-icon">✓</div>
+              </div>
+
+              <!-- Hindi -->
+              <div class="lang-option-card" data-lang-code="hi">
+                <div class="lang-card-top">
+                  <span class="lang-flag">🇮🇳</span>
+                </div>
+                <h3 class="lang-native-name">हिन्दी</h3>
+                <p class="lang-english-name">Hindi</p>
+                <div class="lang-check-icon">✓</div>
+              </div>
+
+              <!-- Odia -->
+              <div class="lang-option-card" data-lang-code="or">
+                <div class="lang-card-top">
+                  <span class="lang-flag">🇮🇳</span>
+                </div>
+                <h3 class="lang-native-name">ଓଡ଼ିଆ</h3>
+                <p class="lang-english-name">Odia</p>
+                <div class="lang-check-icon">✓</div>
+              </div>
+            </div>
+
+            <!-- Live Translation Comparison Demonstration -->
+            <div class="translation-preview-card">
+              <div class="preview-header">
+                <span>🔄 <span data-i18n="trans_preview_lbl">UI Translation Live Preview:</span></span>
+              </div>
+              
+              <div class="translation-phrase-list">
+                <div class="phrase-row">
+                  <span class="en-phrase">“Start Learning”</span>
+                  <span class="trans-arrow">➔</span>
+                  <strong class="ta-phrase" id="previewPhrase1">“கற்றலைத் தொடங்குங்கள்”</strong>
+                </div>
+                <div class="phrase-row">
+                  <span class="en-phrase">“Choose Subject”</span>
+                  <span class="trans-arrow">➔</span>
+                  <strong class="ta-phrase" id="previewPhrase2">“பாடத்தைத் தேர்ந்தெடுக்கவும்”</strong>
+                </div>
+                <div class="phrase-row">
+                  <span class="en-phrase">“My Progress”</span>
+                  <span class="trans-arrow">➔</span>
+                  <strong class="ta-phrase" id="previewPhrase3">“என் முன்னேற்றம்”</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Voice Learning Feature Card -->
+            <div class="voice-learning-feature-card">
+              <div class="voice-card-header">
+                <span class="voice-icon-glow">🔊</span>
+                <div>
+                  <h4 data-i18n="voice_assist_title">Voice Assisted Learning</h4>
+                  <p data-i18n="voice_assist_sub">Read-aloud for low-literacy & first-generation learners</p>
+                </div>
+              </div>
+
+              <div class="voice-sample-box">
+                <div class="voice-wave-anim" id="voiceWaveIndicator">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <p class="voice-sample-text" id="voiceSampleText">
+                  “Plants need sunlight and water to grow.”
+                </p>
+                <p class="voice-sample-tamil" id="voiceSampleTamil">
+                  “தாவரங்கள் வளர சூரிய ஒளியும் நீரும் தேவைப்படுகின்றன.”
+                </p>
+                <button class="btn-primary-leaf btn-medium btn-voice-speak" id="btnTestVoiceSpeaker" data-text="தாவரங்கள் வளர சூரிய ஒளியும் நீரும் தேவைப்படுகின்றன.">
+                  🔊 <span data-i18n="btn_listen_local">Listen in Tamil</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 11: PROGRESS & GAMIFICATION SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-progress">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="progress_title">My Progress</h2>
+              <p class="sub-header-text" data-i18n="milestones_sub">Village Learning Milestones</p>
+            </div>
+            <div class="header-right-actions">
+              <button class="icon-bubble-btn" id="btnShareProgress" title="Share Progress">🔗</button>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Big Stats 4-Grid -->
+            <div class="progress-big-grid">
+              <div class="p-stat-card">
+                <span class="p-stat-icon">⭐</span>
+                <span class="p-stat-num" id="progTotalXp">320</span>
+                <span class="p-stat-lbl" data-i18n="stat_total_xp">Total XP</span>
+              </div>
+              <div class="p-stat-card">
+                <span class="p-stat-icon">🏆</span>
+                <span class="p-stat-num" id="progLevel">Level 3</span>
+                <span class="p-stat-lbl" id="progLevelTitle" data-i18n="badge_scout">Village Scout</span>
+              </div>
+              <div class="p-stat-card">
+                <span class="p-stat-icon">🔥</span>
+                <span class="p-stat-num" id="progStreak">5 Days</span>
+                <span class="p-stat-lbl" data-i18n="stat_streak_lbl">Streak</span>
+              </div>
+              <div class="p-stat-card">
+                <span class="p-stat-icon">🌾</span>
+                <span class="p-stat-num" id="progMissions">12</span>
+                <span class="p-stat-lbl" data-i18n="stat_missions_done">Missions Done</span>
+              </div>
+            </div>
+
+            <!-- Subject Mastery Bars -->
+            <div class="section-heading">
+              <h4 data-i18n="subject_mastery_heading">Subject Mastery</h4>
+              <span class="heading-sub-tag" data-i18n="grade_tag">Grade 10</span>
+            </div>
+
+            <div class="subject-mastery-card">
+              <!-- Math -->
+              <div class="mastery-row">
+                <div class="mastery-header">
+                  <span data-i18n="subj_math_title">📐 Mathematics</span>
+                  <strong>80%</strong>
+                </div>
+                <div class="mastery-track">
+                  <div class="mastery-bar fill-math" style="width: 80%;"></div>
+                </div>
+              </div>
+
+              <!-- Science -->
+              <div class="mastery-row">
+                <div class="mastery-header">
+                  <span data-i18n="subj_science_title">🔬 Science</span>
+                  <strong>70%</strong>
+                </div>
+                <div class="mastery-track">
+                  <div class="mastery-bar fill-science" style="width: 70%;"></div>
+                </div>
+              </div>
+
+              <!-- English -->
+              <div class="mastery-row">
+                <div class="mastery-header">
+                  <span data-i18n="subj_english_title">📖 English</span>
+                  <strong>85%</strong>
+                </div>
+                <div class="mastery-track">
+                  <div class="mastery-bar fill-english" style="width: 85%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Badges Shelf -->
+            <div class="section-heading">
+              <h4 data-i18n="unlocked_badges_heading">Unlocked Badges</h4>
+              <span class="heading-sub-tag" data-i18n="five_earned_tag">5 Earned</span>
+            </div>
+
+            <div class="badges-shelf-grid">
+              <!-- Badge 1 -->
+              <div class="badge-item unlocked" data-badge="first_learner">
+                <div class="badge-icon-wrap">🌱</div>
+                <span class="badge-item-name" data-i18n="badge_first_learner">First Learner</span>
+                <span class="badge-item-status" data-i18n="unlocked_tag">Unlocked</span>
+              </div>
+
+              <!-- Badge 2 -->
+              <div class="badge-item unlocked" data-badge="village_explorer">
+                <div class="badge-icon-wrap">🌾</div>
+                <span class="badge-item-name" data-i18n="badge_village_explorer">Village Explorer</span>
+                <span class="badge-item-status" data-i18n="unlocked_tag">Unlocked</span>
+              </div>
+
+              <!-- Badge 3 -->
+              <div class="badge-item unlocked" data-badge="water_saver">
+                <div class="badge-icon-wrap">💧</div>
+                <span class="badge-item-name" data-i18n="badge_water_saver">Water Saver</span>
+                <span class="badge-item-status" data-i18n="unlocked_tag">Unlocked</span>
+              </div>
+
+              <!-- Badge 4 -->
+              <div class="badge-item unlocked" data-badge="quiz_master">
+                <div class="badge-icon-wrap">⭐</div>
+                <span class="badge-item-name" data-i18n="badge_quiz_master">Quiz Master</span>
+                <span class="badge-item-status" data-i18n="unlocked_tag">Unlocked</span>
+              </div>
+
+              <!-- Badge 5 -->
+              <div class="badge-item unlocked" data-badge="learning_champion">
+                <div class="badge-icon-wrap">🏆</div>
+                <span class="badge-item-name" data-i18n="badge_learning_champion">Learning Champion</span>
+                <span class="badge-item-status" data-i18n="unlocked_tag">Unlocked</span>
+              </div>
+
+              <!-- Badge 6 -->
+              <div class="badge-item locked" id="badgeEcoChampion" data-badge="eco_champion">
+                <div class="badge-icon-wrap">🌍</div>
+                <span class="badge-item-name" data-i18n="badge_eco_champion">Eco Champion</span>
+                <span class="badge-item-status" data-i18n="community_quest_tag">Community Quest</span>
+              </div>
+            </div>
+
+            <!-- Certificate CTA in Progress Screen -->
+            <div class="progress-cert-cta">
+              <button class="btn-primary-leaf btn-large btn-ripple" id="btnClaimCertificate" data-i18n="btn_generate_cert">
+                📜 Generate Village Scholar Certificate
+              </button>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 12: PROFILE SCREEN
+             ============================================== -->
+        <section class="screen" id="screen-profile">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="profile_title">👤 Profile</h2>
+              <p class="sub-header-text" data-i18n="student_account_sub">Student Account</p>
+            </div>
+            <div class="header-right-actions">
+              <button class="icon-bubble-btn" id="btnProfileSettings">⚙️</button>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Profile Hero Card -->
+            <div class="profile-hero-card">
+              <div class="profile-avatar-circle" id="profileAvatarDisplay">🧑‍🌾</div>
+              <h3 class="profile-name-text" id="profileNameDisplay">Kavin</h3>
+              <p class="profile-school-tag" id="profileSchoolDisplay">Govt High School, Melur</p>
+
+              <!-- Attributes Grid -->
+              <div class="profile-meta-grid">
+                <div class="meta-item">
+                  <span class="meta-label" data-i18n="class_lbl">Class</span>
+                  <strong class="meta-val" id="profileClassDisplay">10</strong>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label" data-i18n="language_lbl">Language</span>
+                  <strong class="meta-val" id="profileLangDisplay">Tamil</strong>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label" data-i18n="stat_total_xp">Total XP</span>
+                  <strong class="meta-val" id="profileXpDisplay">320</strong>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label" data-i18n="level_lbl">Level</span>
+                  <strong class="meta-val" id="profileLevelDisplay">3</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Action Buttons -->
+            <div class="profile-buttons-row">
+              <button class="btn-primary-leaf btn-medium" id="btnOpenEditProfile" data-i18n="btn_edit_profile">
+                ✏️ Edit Profile
+              </button>
+              <button class="btn-secondary-leaf btn-medium" id="btnOpenSettings" data-i18n="btn_settings">
+                ⚙️ Settings
+              </button>
+            </div>
+
+            <!-- Teacher Mode Switcher Link -->
+            <div class="teacher-mode-switch-card">
+              <div class="t-switch-left">
+                <span class="t-icon">👩‍🏫</span>
+                <div>
+                  <strong data-i18n="teacher_mode_title">Teacher Dashboard Mode</strong>
+                  <p data-i18n="teacher_mode_sub">View class analytics & learning gap insights</p>
+                </div>
+              </div>
+              <button class="btn-primary-leaf btn-small" id="btnSwitchToTeacherFromProfile" data-i18n="btn_switch_view">
+                Switch View ➔
+              </button>
+            </div>
+
+            <!-- About LearnQuest Footer -->
+            <div class="about-learnquest-box">
+              <strong>🌱 LearnQuest v2.5</strong>
+              <p data-i18n="app_tagline_footer">“Learn from your world, grow with your community.”</p>
+              <small data-i18n="sih_footer_note">SIH25048 • Smart India Hackathon Prototype</small>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 13: EDIT PROFILE SCREEN / MODAL
+             ============================================== -->
+        <section class="screen" id="screen-edit-profile">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="profile">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="edit_profile_title">✏️ Edit Profile</h2>
+              <p class="sub-header-text" data-i18n="edit_profile_sub">Update Student Details</p>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <form class="edit-profile-form" id="editProfileForm" onsubmit="return false;">
+              <!-- Avatar Selector -->
+              <div class="form-group">
+                <label data-i18n="choose_avatar_lbl">Choose Avatar:</label>
+                <div class="avatar-picker-row">
+                  <button type="button" class="avatar-pick-btn active" data-avatar="🧑‍🌾">🧑‍🌾</button>
+                  <button type="button" class="avatar-pick-btn" data-avatar="👧">👧</button>
+                  <button type="button" class="avatar-pick-btn" data-avatar="👦">👦</button>
+                  <button type="button" class="avatar-pick-btn" data-avatar="👩‍🎓">👩‍🎓</button>
+                  <button type="button" class="avatar-pick-btn" data-avatar="🌱">🌱</button>
+                </div>
+              </div>
+
+              <!-- Name Input -->
+              <div class="form-group">
+                <label for="inputStudentName" data-i18n="student_name_lbl">Student Name:</label>
+                <input type="text" id="inputStudentName" class="form-input" value="Kavin" required placeholder="Enter student name">
+              </div>
+
+              <!-- Class Input -->
+              <div class="form-group">
+                <label for="selectStudentClass" data-i18n="class_grade_lbl">Class / Grade:</label>
+                <select id="selectStudentClass" class="form-input">
+                  <option value="6">Class 6</option>
+                  <option value="7">Class 7</option>
+                  <option value="8">Class 8</option>
+                  <option value="9">Class 9</option>
+                  <option value="10" selected>Class 10</option>
+                </select>
+              </div>
+
+              <!-- Primary Language -->
+              <div class="form-group">
+                <label for="selectStudentLang" data-i18n="primary_lang_lbl">Primary Language:</label>
+                <select id="selectStudentLang" class="form-input">
+                  <option value="Tamil" selected>Tamil (தமிழ்)</option>
+                  <option value="English">English</option>
+                  <option value="Hindi">Hindi (हिन्दी)</option>
+                  <option value="Odia">Odia (ଓଡ଼ିଆ)</option>
+                </select>
+              </div>
+
+              <!-- School Name -->
+              <div class="form-group">
+                <label for="inputSchoolName" data-i18n="school_village_lbl">School / Village Name:</label>
+                <input type="text" id="inputSchoolName" class="form-input" value="Govt High School, Melur">
+              </div>
+
+              <!-- Save & Cancel Buttons -->
+              <div class="form-actions-row">
+                <button type="button" class="btn-secondary-leaf btn-large" id="btnCancelEditProfile" data-i18n="btn_cancel">
+                  Cancel
+                </button>
+                <button type="submit" class="btn-primary-leaf btn-large" id="btnSaveEditProfile" data-i18n="btn_save_changes">
+                  Save Changes ✓
+                </button>
+              </div>
+            </form>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 14: TEACHER DASHBOARD
+             ============================================== -->
+        <section class="screen" id="screen-teacher">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="teacher_dashboard_title">👩‍🏫 Class Learning Insights</h2>
+              <p class="sub-header-text" data-i18n="teacher_school_sub">Grade 10 • Melur Village School</p>
+            </div>
+            <div class="header-right-actions">
+              <button class="btn-ctrl-mini" id="btnTeacherBackToStudent" data-i18n="btn_student_view">Student View ➔</button>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Teacher Overview Metrics Grid -->
+            <div class="teacher-metrics-row">
+              <div class="t-stat-card">
+                <span class="t-stat-num">30</span>
+                <span class="t-stat-lbl" data-i18n="total_students_lbl">Total Students</span>
+              </div>
+              <div class="t-stat-card">
+                <span class="t-stat-num text-green">24</span>
+                <span class="t-stat-lbl" data-i18n="active_learners_lbl">Active Learners</span>
+              </div>
+              <div class="t-stat-card">
+                <span class="t-stat-num text-gold">145</span>
+                <span class="t-stat-lbl" data-i18n="missions_done_lbl">Missions Done</span>
+              </div>
+            </div>
+
+            <!-- Subject Performance Averages -->
+            <div class="teacher-section-card">
+              <div class="t-card-header">
+                <h5 data-i18n="class_subject_averages">📊 Class Subject Averages</h5>
+                <span class="t-badge-info" data-i18n="weekly_realtime_tag">Weekly Real-Time</span>
+              </div>
+              
+              <div class="teacher-bar-group">
+                <div class="t-bar-item">
+                  <div class="t-bar-meta">
+                    <span data-i18n="subj_math_title">📐 Mathematics</span>
+                    <strong>78%</strong>
+                  </div>
+                  <div class="t-bar-track">
+                    <div class="t-bar-fill bg-math" style="width: 78%;"></div>
+                  </div>
+                </div>
+
+                <div class="t-bar-item">
+                  <div class="t-bar-meta">
+                    <span data-i18n="subj_science_title">🔬 Science</span>
+                    <strong>65%</strong>
+                  </div>
+                  <div class="t-bar-track">
+                    <div class="t-bar-fill bg-warning" style="width: 65%;"></div>
+                  </div>
+                </div>
+
+                <div class="t-bar-item">
+                  <div class="t-bar-meta">
+                    <span data-i18n="subj_english_title">📖 English</span>
+                    <strong>82%</strong>
+                  </div>
+                  <div class="t-bar-track">
+                    <div class="t-bar-fill bg-english" style="width: 82%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CRITICAL INSIGHT: STUDENTS NEEDING SUPPORT -->
+            <div class="teacher-gap-alert-card">
+              <div class="gap-card-header">
+                <span class="gap-warn-icon">⚠️</span>
+                <div>
+                  <h4 data-i18n="students_needing_support">Students Needing Support</h4>
+                  <p data-i18n="gap_analytics_sub">Identified via automated real-world quiz & mission analytics</p>
+                </div>
+              </div>
+
+              <div class="gap-topics-list">
+                <!-- Topic 1: Fractions -->
+                <div class="gap-topic-row">
+                  <div class="gap-topic-left">
+                    <span class="topic-dot dot-red"></span>
+                    <div>
+                      <strong data-i18n="gap1_title">Fractions (Math)</strong>
+                      <span class="gap-subtext" data-i18n="gap1_sub">5 students need additional practice in Fractions.</span>
+                    </div>
+                  </div>
+                  <button class="btn-xs-remedial" data-topic="Fractions" data-count="5" data-i18n="btn_assign_remedial">Assign Remedial ➔</button>
+                </div>
+
+                <!-- Topic 2: Plants -->
+                <div class="gap-topic-row">
+                  <div class="gap-topic-left">
+                    <span class="topic-dot dot-orange"></span>
+                    <div>
+                      <strong data-i18n="gap2_title">Plants & Root Absorption (Science)</strong>
+                      <span class="gap-subtext" data-i18n="gap2_sub">4 students struggling with Plant Anatomy terminology.</span>
+                    </div>
+                  </div>
+                  <button class="btn-xs-remedial" data-topic="Plants" data-count="4" data-i18n="btn_assign_remedial">Assign Remedial ➔</button>
+                </div>
+
+                <!-- Topic 3: Grammar -->
+                <div class="gap-topic-row">
+                  <div class="gap-topic-left">
+                    <span class="topic-dot dot-yellow"></span>
+                    <div>
+                      <strong data-i18n="gap3_title">Past Tense Grammar (English)</strong>
+                      <span class="gap-subtext" data-i18n="gap3_sub">3 students need revision on regular verbs.</span>
+                    </div>
+                  </div>
+                  <button class="btn-xs-remedial" data-topic="Grammar" data-count="3" data-i18n="btn_assign_remedial">Assign Remedial ➔</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Student Roster & Progress Viewer -->
+            <div class="teacher-section-card">
+              <div class="t-card-header">
+                <h5 data-i18n="student_roster_heading">👥 Student Roster Progress</h5>
+                <button class="btn-text-link" id="btnFilterNeedsHelp" data-i18n="filter_needs_help">Filter: Needs Help</button>
+              </div>
+
+              <div class="student-roster-list" id="studentRosterList">
+                <div class="student-roster-item clickable-student" data-student="kavin">
+                  <div class="student-meta">
+                    <span class="student-avatar">🧑‍🌾</span>
+                    <div>
+                      <strong>Kavin (You)</strong>
+                      <span>Missions: 12 • XP: 320</span>
+                    </div>
+                  </div>
+                  <span class="student-status-badge badge-good" data-i18n="badge_on_track">On Track 🌟</span>
+                </div>
+
+                <div class="student-roster-item clickable-student" data-student="ananya">
+                  <div class="student-meta">
+                    <span class="student-avatar">👧</span>
+                    <div>
+                      <strong>Ananya</strong>
+                      <span data-i18n="ananya_sub">Missions: 8 • Needs help in Fractions</span>
+                    </div>
+                  </div>
+                  <span class="student-status-badge badge-warning" data-i18n="badge_needs_practice">Needs Practice ⚠️</span>
+                </div>
+
+                <div class="student-roster-item clickable-student" data-student="selvam">
+                  <div class="student-meta">
+                    <span class="student-avatar">👦</span>
+                    <div>
+                      <strong>Selvam</strong>
+                      <span>Missions: 14 • XP: 390</span>
+                    </div>
+                  </div>
+                  <span class="student-status-badge badge-good" data-i18n="badge_top_learner">Top Learner 🏆</span>
+                </div>
+
+                <div class="student-roster-item clickable-student" data-student="priya">
+                  <div class="student-meta">
+                    <span class="student-avatar">👧</span>
+                    <div>
+                      <strong>Priya</strong>
+                      <span data-i18n="priya_sub">Missions: 6 • Inactive 2 days</span>
+                    </div>
+                  </div>
+                  <span class="student-status-badge badge-danger" data-i18n="badge_needs_nudge">Needs Nudge 📩</span>
+                </div>
+              </div>
+
+              <div class="teacher-action-buttons">
+                <button class="btn-primary-leaf btn-medium" id="btnViewAllStudents" data-i18n="btn_view_student_details">
+                  [ View Student Progress Details ]
+                </button>
+              </div>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SCREEN 15: COMMUNITY CHALLENGE
+             ============================================== -->
+        <section class="screen" id="screen-community">
+          <header class="app-top-header header-with-back">
+            <button class="btn-back-arrow" data-back="home">←</button>
+            <div class="header-center-title">
+              <h2 data-i18n="village_comm_challenge_title">🌍 Village Learning Challenge</h2>
+              <p class="sub-header-text" data-i18n="comm_impact_sub">Community-Wide Impact</p>
+            </div>
+            <div class="header-right-actions">
+              <span class="badge-mini-gold">+50 XP</span>
+            </div>
+          </header>
+
+          <div class="screen-scrollable-content">
+            <!-- Community Challenge Hero -->
+            <div class="community-quest-hero">
+              <div class="comm-hero-badge" data-i18n="comm_hero_badge">🌍 Melur Village Eco Mission</div>
+              <h3 class="comm-quest-title" data-i18n="comm_quest_q">“Find 3 ways your community can reduce water waste.”</h3>
+              <p class="comm-quest-desc" data-i18n="comm_quest_desc">
+                Work with your family and neighbors to protect village water tables and tanks (குளம்).
+              </p>
+
+              <!-- Progress Indicator -->
+              <div class="comm-progress-tracker">
+                <div class="tracker-header">
+                  <span data-i18n="challenge_progress_lbl">Challenge Progress:</span>
+                  <strong id="commProgressFraction">2 / 3</strong>
+                </div>
+                <div class="tracker-bar">
+                  <div class="tracker-fill" id="commTrackerFill" style="width: 66%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 Community Action Checkpoints -->
+            <div class="community-checklist">
+              <div class="check-item-card done">
+                <div class="check-box-circle">✓</div>
+                <div class="check-text">
+                  <strong data-i18n="comm_check1_title">1. Fix leaking public tap in Melur street</strong>
+                  <span data-i18n="comm_check1_desc">Reported to village Panchayat with photo proof.</span>
+                </div>
+              </div>
+
+              <div class="check-item-card done">
+                <div class="check-box-circle">✓</div>
+                <div class="check-text">
+                  <strong data-i18n="comm_check2_title">2. Divert kitchen wastewater to vegetable garden</strong>
+                  <span data-i18n="comm_check2_desc">Greywater reused for banana and brinjal plants.</span>
+                </div>
+              </div>
+
+              <div class="check-item-card pending" id="checkItem3">
+                <div class="check-box-circle" id="circleCheck3">○</div>
+                <div class="check-text">
+                  <strong data-i18n="comm_check3_title">3. Place a rooftop rainwater catchment bucket</strong>
+                  <span data-i18n="comm_check3_desc">Collect clean runoff during evening rains.</span>
+                </div>
+                <button class="btn-xs-clean" id="btnCompleteCheck3" data-i18n="btn_mark_done">Mark Done</button>
+              </div>
+            </div>
+
+            <!-- Reward Unlocked Box -->
+            <div class="community-reward-box">
+              <div class="reward-preview">
+                <div class="reward-icon-sparkle">🌱</div>
+                <div>
+                  <strong data-i18n="comm_reward_title">Reward: +50 XP & Eco Champion Badge</strong>
+                  <p data-i18n="comm_reward_desc">Unlocks special community badge on your profile!</p>
+                </div>
+              </div>
+
+              <button class="btn-primary-leaf btn-large btn-ripple" id="btnCompleteCommunityChallenge" data-i18n="btn_complete_challenge">
+                Complete Challenge 🚀
+              </button>
+            </div>
+
+            <div class="bottom-spacer"></div>
+          </div>
+        </section>
+
+      </div> <!-- /screen-viewport -->
+
+      <!-- ==============================================
+           GLOBAL BOTTOM NAVIGATION BAR
+           ============================================== -->
+      <nav class="bottom-nav-bar" id="bottomNav">
+        <button class="nav-tab active" data-target="home">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label" data-i18n="nav_home">Home</span>
+        </button>
+        <button class="nav-tab" data-target="subjects">
+          <span class="nav-icon">📚</span>
+          <span class="nav-label" data-i18n="nav_subjects">Subjects</span>
+        </button>
+        <button class="nav-tab" data-target="missions">
+          <span class="nav-icon">🌾</span>
+          <span class="nav-label" data-i18n="nav_missions">Missions</span>
+          <span class="nav-badge-dot"></span>
+        </button>
+        <button class="nav-tab" data-target="progress">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label" data-i18n="nav_progress">Progress</span>
+        </button>
+        <button class="nav-tab" data-target="profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-label" data-i18n="nav_profile">Profile</span>
+        </button>
+      </nav>
+
+      <!-- Interactive Toast Layer -->
+      <div class="toast-notification-layer" id="toastContainer"></div>
+
+      <!-- Celebration Modal Layer -->
+      <div class="modal-overlay" id="celebrationModal" style="display: none;">
+        <div class="modal-card">
+          <div class="modal-confetti">🎉</div>
+          <h3 id="modalTitle">Mission Completed!</h3>
+          <p id="modalSubtitle">+30 XP Earned</p>
+          <div class="modal-badge-slot" id="modalBadgeSlot">
+            <span class="badge-huge">🌾</span>
+            <strong id="modalBadgeName">Village Explorer</strong>
+          </div>
+          <button class="btn-primary-leaf btn-large" id="btnModalContinue">
+            Continue Learning ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- ==============================================
+           INTERACTIVE MODAL: KIRANA STORE MATH COUNTER
+           ============================================== -->
+      <div class="modal-overlay" id="modalShopGame" style="display: none;">
+        <div class="modal-card modal-large-card">
+          <div class="modal-head-row">
+            <h3 data-i18n="shop_modal_title">🛒 Village Kirana Store Math</h3>
+            <button class="btn-close-modal" id="btnCloseShopModal">✕</button>
+          </div>
+          <p class="modal-desc-sub" data-i18n="shop_modal_desc">Select grocery items and calculate customer bill & change.</p>
+          
+          <div class="shop-items-grid">
+            <div class="shop-item-pill" data-name="Rice" data-price="40">
+              <span>🌾 <span data-i18n="shop_item_rice">Rice</span></span> <strong>₹40/kg</strong>
+              <div class="qty-stepper">
+                <button class="qty-btn minus">-</button>
+                <span class="item-qty">0</span>
+                <button class="qty-btn plus">+</button>
+              </div>
+            </div>
+            <div class="shop-item-pill" data-name="Jaggery" data-price="50">
+              <span>🍯 <span data-i18n="shop_item_jaggery">Jaggery</span></span> <strong>₹50/kg</strong>
+              <div class="qty-stepper">
+                <button class="qty-btn minus">-</button>
+                <span class="item-qty">0</span>
+                <button class="qty-btn plus">+</button>
+              </div>
+            </div>
+            <div class="shop-item-pill" data-name="Lentils" data-price="60">
+              <span>🍲 <span data-i18n="shop_item_lentils">Lentils</span></span> <strong>₹60/kg</strong>
+              <div class="qty-stepper">
+                <button class="qty-btn minus">-</button>
+                <span class="item-qty">0</span>
+                <button class="qty-btn plus">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop-bill-box">
+            <div class="bill-row">
+              <span data-i18n="shop_total_bill_lbl">Total Bill:</span>
+              <strong id="shopTotalBill">₹0</strong>
+            </div>
+            <div class="bill-row">
+              <span data-i18n="shop_cash_given_lbl">Cash Given:</span>
+              <input type="number" id="shopCashGiven" class="shop-cash-input" value="100" min="0">
+            </div>
+            <div class="bill-row highlight">
+              <span data-i18n="shop_change_due_lbl">Change Due:</span>
+              <strong id="shopChangeDue">₹100</strong>
+            </div>
+          </div>
+
+          <button class="btn-primary-leaf btn-large btn-ripple" id="btnShopCheckout" data-i18n="btn_shop_checkout">
+            Verify Bill & Earn +30 XP ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- ==============================================
+           INTERACTIVE MODAL: FARMING HARVEST WEIGHT SCALE
+           ============================================== -->
+      <div class="modal-overlay" id="modalFarmGame" style="display: none;">
+        <div class="modal-card modal-large-card">
+          <div class="modal-head-row">
+            <h3 data-i18n="farm_modal_title">🌾 Rice Harvest Weighing Scale</h3>
+            <button class="btn-close-modal" id="btnCloseFarmModal">✕</button>
+          </div>
+          <p class="modal-desc-sub" data-i18n="farm_modal_desc">Each bag weighs <strong>25 kg</strong>. Place bags on scale to calculate total harvest load.</p>
+          
+          <div class="harvest-scale-display">
+            <div class="scale-dial">
+              <span class="scale-needle" id="scaleNeedle"></span>
+              <div class="scale-reading-box">
+                <strong id="scaleWeightNumber">125</strong> <small>kg</small>
+              </div>
+            </div>
+            <div class="scale-bag-stack" id="scaleBagStack">
+              <span>🌾</span><span>🌾</span><span>🌾</span><span>🌾</span><span>🌾</span>
+            </div>
+          </div>
+
+          <div class="scale-stepper-controls">
+            <span data-i18n="bags_on_scale_lbl">Bags on scale:</span>
+            <div class="scale-btn-group">
+              <button class="scale-btn" data-bags="3">3 Bags (75 kg)</button>
+              <button class="scale-btn active" data-bags="5">5 Bags (125 kg)</button>
+              <button class="scale-btn" data-bags="8">8 Bags (200 kg)</button>
+            </div>
+          </div>
+
+          <button class="btn-primary-leaf btn-large btn-ripple" id="btnFarmHarvestComplete" data-i18n="btn_confirm_weight">
+            Confirm Weight & Earn +30 XP ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- ==============================================
+           INTERACTIVE MODAL: VILLAGE SCHOLAR CERTIFICATE
+           ============================================== -->
+      <div class="modal-overlay" id="modalCertificate" style="display: none;">
+        <div class="modal-card cert-modal-card">
+          <div class="modal-head-row">
+            <h3 data-i18n="cert_modal_title">📜 Village Scholar Certificate</h3>
+            <button class="btn-close-modal" id="btnCloseCertModal">✕</button>
+          </div>
+          
+          <div class="certificate-canvas-wrap">
+            <canvas id="certCanvas" width="400" height="260"></canvas>
+          </div>
+
+          <div class="cert-actions-row">
+            <button class="btn-secondary-leaf btn-medium" id="btnDownloadCert" data-i18n="btn_download_png">
+              💾 Download PNG
+            </button>
+            <button class="btn-primary-leaf btn-medium" id="btnPrintCert" data-i18n="btn_print_cert">
+              🖨️ Print Certificate
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==============================================
+           INTERACTIVE MODAL: TEACHER STUDENT DETAIL INSPECTOR
+           ============================================== -->
+      <div class="modal-overlay" id="modalStudentDetail" style="display: none;">
+        <div class="modal-card modal-large-card">
+          <div class="modal-head-row">
+            <h3 id="detailStudentName">Kavin's Learning Profile</h3>
+            <button class="btn-close-modal" id="btnCloseStudentModal">✕</button>
+          </div>
+          
+          <div class="student-profile-summary-box">
+            <div class="summary-stat-item">
+              <span class="ss-lbl" data-i18n="stat_accuracy_lbl">Accuracy</span>
+              <strong class="ss-val text-green" id="detailAccuracy">84%</strong>
+            </div>
+            <div class="summary-stat-item">
+              <span class="ss-lbl" data-i18n="stat_missions_lbl">Missions</span>
+              <strong class="ss-val text-gold" id="detailMissions">12 Done</strong>
+            </div>
+            <div class="summary-stat-item">
+              <span class="ss-lbl" data-i18n="stat_streak_lbl">Streak</span>
+              <strong class="ss-val" id="detailStreak">5 Days</strong>
+            </div>
+          </div>
+
+          <div class="weak-topics-section">
+            <strong data-i18n="weak_topics_heading">Concepts Needing Focus:</strong>
+            <div class="weak-pill-tags" id="detailWeakPills">
+              <span class="weak-tag">Fractions (1/4 division)</span>
+              <span class="weak-tag">Plant Xylem / Water uptake</span>
+            </div>
+          </div>
+
+          <button class="btn-primary-leaf btn-large btn-ripple" id="btnSendStudentRemedial" data-i18n="btn_send_targeted_quest">
+            Send Targeted Village Quest ➔
+          </button>
+        </div>
+      </div>
+
+    </div> <!-- /mobile-phone-frame -->
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
